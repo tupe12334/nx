@@ -1539,7 +1539,7 @@ function runInstall(nxWorkspaceRoot?: string) {
   });
   execSync(installCommand, {
     stdio: [0, 1, 2],
-    windowsHide: false,
+    windowsHide: true,
     cwd: nxWorkspaceRoot ?? process.cwd(),
   });
 }
@@ -1888,7 +1888,7 @@ export async function runMigration() {
       }
       execSync(`${p} _migrate ${process.argv.slice(3).join(' ')}`, {
         stdio: ['inherit', 'inherit', 'inherit'],
-        windowsHide: false,
+        windowsHide: true,
       });
     }
   } else {
@@ -1976,14 +1976,14 @@ export async function nxCliPath(nxWorkspaceRoot?: string) {
       execSync(pmc.preInstall, {
         cwd: tmpDir,
         stdio,
-        windowsHide: false,
+        windowsHide: true,
       });
       // if it's berry ensure we set the node_linker to node-modules
       if (packageManager === 'yarn' && pmc.ciInstall.includes('immutable')) {
         execSync('yarn config set nodeLinker node-modules', {
           cwd: tmpDir,
           stdio,
-          windowsHide: false,
+          windowsHide: true,
         });
       }
     }
@@ -1991,7 +1991,7 @@ export async function nxCliPath(nxWorkspaceRoot?: string) {
     execSync(`${pmc.install} ${pmc.ignoreScriptsFlag ?? ''}`, {
       cwd: tmpDir,
       stdio,
-      windowsHide: false,
+      windowsHide: true,
     });
 
     // Set NODE_PATH so that these modules can be used for module resolution
