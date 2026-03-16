@@ -148,6 +148,7 @@ export declare class RunningTasksService {
   constructor(db: ExternalObject<NxDbConnection>)
   getRunningTasks(ids: Array<string>): Array<string>
   addRunningTask(taskId: string): void
+  getRunningTaskContext(taskId: string): RunningTaskContext | null
   removeRunningTask(taskId: string): void
 }
 
@@ -482,6 +483,11 @@ export declare function restoreTerminal(): void
 export declare const enum RunMode {
   RunOne = 0,
   RunMany = 1
+}
+
+export interface RunningTaskContext {
+  pid: number
+  cwd: string
 }
 
 export interface RuntimeInput {

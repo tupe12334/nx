@@ -15,6 +15,12 @@ pub const SCHEMA: &str = "CREATE TABLE IF NOT EXISTS running_tasks (
     cwd TEXT NOT NULL
 );";
 
+#[napi(object)]
+pub struct RunningTaskContext {
+    pub pid: u32,
+    pub cwd: String,
+}
+
 #[napi]
 struct RunningTasksService {
     db: Arc<Mutex<NxDbConnection>>,
@@ -114,6 +120,27 @@ impl RunningTasksService {
         debug!("Added {} to running tasks", &task_id);
         self.added_tasks.insert(task_id);
         Ok(())
+    }
+
+    #[napi]
+    pub fn get_running_task_context(
+        &self,
+        task_id: String,
+    ) -> anyhow::Result<Option<RunningTaskContext>> {
+        if let Some((pid, _, cwd)) = self.db.lock().unwrap().query_row(
+            "SELECT pid, command, cwd FROM running_tasks WHERE task_id = ?",
+            [&task_id],
+            |row| {
+                let pid: u32 = row.get(0)?;
+                let command: String = row.get(1)?;
+                let cwd: String = row.get(2)?;
+                Ok((pid, command, cwd))
+            },
+        )? {
+            Ok(Some(RunningTaskContext { pid, cwd }))
+        } else {
+            Ok(None)
+        }
     }
 
     #[napi]
