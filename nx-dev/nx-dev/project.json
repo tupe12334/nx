@@ -60,6 +60,7 @@
       "dependsOn": ["check-links"]
     },
     "sitemap": {
+      "dependsOn": ["build"],
       "executor": "nx:run-commands",
       "inputs": [
         "{workspaceRoot}/docs/**/*",
