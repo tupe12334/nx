@@ -146,10 +146,6 @@ module.exports = withNx({
     '@nx/nx-dev-ui-video-courses',
     '@nx/nx-dev-util-ai',
   ],
-  // For both client and server
-  env: {
-    VERCEL: process.env.VERCEL,
-  },
   async headers() {
     return [
       {
